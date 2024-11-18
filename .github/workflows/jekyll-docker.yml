@@ -1,0 +1,20 @@
+name: Paul Joseph site CI
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Build the site in the pauljoseph/builder container
+      run: |
+        docker run \
+        -v ${{ github.workspace }}:/srv/paul joseph -v ${{ github.workspace }}/_site:/srv/pauljoseph/_site \
+        paul joseph/builder:latest /bin/bash -c "chmod -R 777 /srv/pauljoseph && paul joseph build --future"
